@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Manutenção Industrial</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <span>⚙</span>
+            <div>
+                <h2>INDUSTRIAL</h2>
+                <small>Maintenance System</small>
+            </div>
+        </div>
+
+        <nav>
+            <a href="#dashboard" class="active">▦ Dashboard</a>
+            <a href="#maquinas">⚙ Máquinas</a>
+            <a href="#manutencoes">🔧 Manutenções</a>
+            <a href="#preventivas">📅 Preventivas</a>
+            <a href="#historico">📋 Histórico</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span class="online"></span>
+            Sistema operacional
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <h1>Sistema de Manutenção</h1>
+                <p>Controle de equipamentos e serviços industriais</p>
+            </div>
+            <div class="user">
+                <div class="avatar">MT</div>
+                <div>
+                    <strong>Manutenção</strong>
+                    <small>Equipe técnica</small>
+                </div>
+            </div>
+        </header>
+
+        <section id="dashboard">
+            <div class="welcome">
+                <div>
+                    <h2>Painel de controle</h2>
+                    <p>Acompanhe a situação dos equipamentos da fábrica.</p>
+                </div>
+                <span id="dataAtual"></span>
+            </div>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon blue">⚙</div>
+                    <p>Total de máquinas</p>
+                    <h2 id="totalMaquinas">0</h2>
+                    <small>Equipamentos cadastrados</small>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon green">✓</div>
+                    <p>Em operação</p>
+                    <h2 id="emOperacao">0</h2>
+                    <small>Máquinas disponíveis</small>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon orange">🔧</div>
+                    <p>Em manutenção</p>
+                    <h2 id="emManutencao">0</h2>
+                    <small>Equipamentos parados</small>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon red">!</div>
+                    <p>Preventivas pendentes</p>
+                    <h2 id="pendentes">0</h2>
+                    <small>Requerem acompanhamento</small>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="maquinas">
+            <div class="section-header">
+                <div>
+                    <h2>Cadastro de máquinas</h2>
+                    <p>Gerencie os equipamentos industriais</p>
+                </div>
+                <button class="btn-primary" onclick="abrirModalMaquina()">
+                    + Nova máquina
+                </button>
+            </div>
+
+            <div class="filters">
+                <input
+                    type="search"
+                    id="buscaMaquina"
+                    placeholder="Buscar máquina ou patrimônio..."
+                >
+
+                <select id="filtroStatus">
+                    <option value="">Todos os status</option>
+                    <option value="Operacional">Operacional</option>
+                    <option value="Em manutenção">Em manutenção</option>
+                    <option value="Parada">Parada</option>
+                </select>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patrimônio</th>
+                            <th>Equipamento</th>
+                            <th>Setor</th>
+                            <th>Última manutenção</th>
+                            <th>Próxima manutenção</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaMaquinas"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel" id="manutencoes">
+            <div class="section-header">
+                <div>
+                    <h2>Ordens de manutenção</h2>
+                    <p>Registro de serviços preventivos e corretivos</p>
+                </div>
+                <button class="btn-primary" onclick="abrirModalManutencao()">
+                    + Nova ordem
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ordem</th>
+                            <th>Máquina</th>
+                            <th>Tipo</th>
+                            <th>Técnico</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaManutencoes"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel" id="preventivas">
+            <div class="section-header">
+                <div>
+                    <h2>Plano preventivo</h2>
+                    <p>Próximas datas programadas de manutenção</p>
+                </div>
+            </div>
+            <div id="listaPreventivas" class="preventive-list"></div>
+        </section>
+
+        <section class="panel" id="historico">
+            <div class="section-header">
+                <div>
+                    <h2>Histórico de serviços</h2>
+                    <p>Registros de manutenções concluídas</p>
+                </div>
+            </div>
+            <div id="listaHistorico"></div>
+        </section>
+
+        <footer>
+            Sistema de Manutenção Industrial • Controle de equipamentos
+        </footer>
+    </main>
+
+    <!-- Modal de máquina -->
+    <div class="modal" id="modalMaquina">
+        <form class="modal-content" id="formMaquina">
+            <div class="modal-header">
+                <h2>Nova máquina</h2>
+                <button type="button" class="close"
+                    onclick="fecharModal('modalMaquina')">×</button>
+            </div>
+
+            <label>Nome do equipamento</label>
+            <input name="nome" required placeholder="Ex.: Torno CNC">
+
+            <label>Número do patrimônio</label>
+            <input name="patrimonio" required placeholder="Ex.: MAQ-004">
+
+            <label>Setor</label>
+            <input name="setor" required placeholder="Ex.: Usinagem">
+
+            <label>Status</label>
+            <select name="status">
+                <option>Operacional</option>
+                <option>Em manutenção</option>
+                <option>Parada</option>
+            </select>
+
+            <label>Última manutenção</label>
+            <input name="ultima" type="date">
+
+            <label>Próxima manutenção preventiva</label>
+            <input name="proxima" type="date" required>
+
+            <button class="btn-primary" type="submit">
+                Salvar máquina
+            </button>
+        </form>
+    </div>
+
+    <!-- Modal de manutenção -->
+    <div class="modal" id="modalManutencao">
+        <form class="modal-content" id="formManutencao">
+            <div class="modal-header">
+                <h2>Nova ordem de serviço</h2>
+                <button type="button" class="close"
+                    onclick="fecharModal('modalManutencao')">×</button>
+            </div>
+
+            <label>Máquina</label>
+            <select name="maquina" id="selectMaquina" required></select>
+
+            <label>Tipo de manutenção</label>
+            <select name="tipo">
+                <option>Preventiva</option>
+                <option>Corretiva</option>
+                <option>Preditiva</option>
+            </select>
+
+            <label>Técnico responsável</label>
+            <input name="tecnico" required placeholder="Nome do técnico">
+
+            <label>Data programada</label>
+            <input name="data" type="date" required>
+
+            <label>Descrição do serviço</label>
+            <textarea name="descricao" required
+                placeholder="Descreva o serviço a realizar"></textarea>
+
+            <button class="btn-primary" type="submit">
+                Criar ordem
+            </button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
